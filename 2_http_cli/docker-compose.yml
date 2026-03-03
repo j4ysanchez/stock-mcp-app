@@ -1,0 +1,40 @@
+services:
+  mcp-server:
+    build: ./server
+    ports:
+      - "8001:8001"
+    volumes:
+      # SQLite cache persists across container restarts.
+      - stock_cache:/data
+    environment:
+      - CACHE_DB_PATH=/data/stocks_cache.db
+      - HOST=0.0.0.0
+      - PORT=8001
+    healthcheck:
+      # Check that uvicorn is accepting TCP connections on port 8001.
+      test:
+        - "CMD-SHELL"
+        - "python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('localhost', 8001)); s.close()\""
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  mcp-client:
+    build: ./client
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    # Keep stdin open so the interactive CLI works.
+    stdin_open: true
+    tty: true
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - MCP_SERVER_URL=http://mcp-server:8001/sse
+
+networks:
+  default:
+    name: stock_net
+
+volumes:
+  stock_cache:
