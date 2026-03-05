@@ -6,7 +6,7 @@
 | `1_stdio/` | stdio (subprocess) | CLI | built |
 | `2_http_cli/` | HTTP/SSE | CLI (2 containers) | built |
 | `3_jupyter_notebook/` | HTTP/SSE | Jupyter Notebook | planned |
-| `4_fastapi_html/` | HTTP/SSE | FastAPI + vanilla HTML | planned |
+| `4_fastapi_html/` | HTTP/SSE | FastAPI + vanilla HTML | built |
 | `5_fastapi_react/` | HTTP/SSE | FastAPI + React | planned |
 | `6_ollama_local/` | HTTP/SSE | FastAPI + React + Ollama (Qwen3.5 9B) | planned |
 
